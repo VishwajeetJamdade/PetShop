@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Pet {
+  id        Int      @id @default(autoincrement())
+  name      String
+  type      String
+  age       Int
+  breed     String?
+  createdAt DateTime @default(now()) @db.DateTime(0) // Changed to DateTime(0)
+  updatedAt DateTime @updatedAt @db.DateTime(0) // Changed to DateTime(0)
+  images    Image[]
+}
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  url       String
+  petId     Int
+  pet       Pet      @relation(fields: [petId], references: [id])
+  createdAt DateTime @default(now()) @db.DateTime(0) // Changed to DateTime(0)
+}
